@@ -1,12 +1,12 @@
 {
-  "name": "@duckdb/node-bindings-linux-arm64",
-  "version": "1.3.2-alpha.26",
+  "name": "@rizecom/node-bindings-win32-x64",
+  "version": "1.4.0-preview",
   "license": "MIT",
   "os": [
-    "linux"
+    "win32"
   ],
   "cpu": [
-    "arm64"
+    "x64"
   ],
   "repository": {
     "type": "git",

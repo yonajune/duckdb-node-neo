@@ -4,7 +4,7 @@ An API for using [DuckDB](https://duckdb.org/) in [Node](https://nodejs.org/).
 
 This is a high-level API meant for applications.
 It depends on low-level bindings that adhere closely to [DuckDB's C API](https://duckdb.org/docs/api/c/overview),
-available separately as [@duckdb/node-bindings](https://www.npmjs.com/package/@duckdb/node-bindings).
+available separately as [@rizecom/node-bindings](https://www.npmjs.com/package/@rizecom/node-bindings).
 
 ## Features
 
@@ -33,7 +33,7 @@ for the most up-to-date roadmap.
 ### Get Basic Information
 
 ```ts
-import duckdb from '@duckdb/node-api';
+import duckdb from '@rizecom/node-api';
 
 console.log(duckdb.version());
 
@@ -43,7 +43,7 @@ console.log(duckdb.configurationOptionDescriptions());
 ### Connect
 
 ```ts
-import { DuckDBConnection } from '@duckdb/node-api';
+import { DuckDBConnection } from '@rizecom/node-api';
 
 const connection = await DuckDBConnection.create();
 ```
@@ -54,7 +54,7 @@ For advanced usage, you can create instances explicitly.
 ### Create Instance
 
 ```ts
-import { DuckDBInstance } from '@duckdb/node-api';
+import { DuckDBInstance } from '@rizecom/node-api';
 ```
 
 Create with an in-memory database:
@@ -92,7 +92,7 @@ const instance = await DuckDBInstance.fromCache('my_duckdb.db');
 This uses the default instance cache. For advanced usage, you can create
 instance caches explicitly:
 ```ts
-import { DuckDBInstanceCache } from '@duckdb/node-api';
+import { DuckDBInstanceCache } from '@rizecom/node-api';
 
 const cache = new DuckDBInstanceCache();
 const instance = await cache.getOrCreateInstance('my_duckdb.db');
@@ -621,7 +621,7 @@ for (let columnIndex = 0; columnIndex < columnCount; columnIndex++) {
 ### Inspect Data Types
 
 ```ts
-import { DuckDBTypeId } from '@duckdb/node-api';
+import { DuckDBTypeId } from '@rizecom/node-api';
 
 if (columnType.typeId === DuckDBTypeId.ARRAY) {
   const arrayValueType = columnType.valueType;
@@ -672,7 +672,7 @@ const typeString = columnType.toString();
 ### Inspect Data Values
 
 ```ts
-import { DuckDBTypeId } from '@duckdb/node-api';
+import { DuckDBTypeId } from '@rizecom/node-api';
 
 if (columnType.typeId === DuckDBTypeId.ARRAY) {
   const arrayItems = columnValue.items; // array of values
@@ -926,7 +926,7 @@ for (let stmtIndex = 0; stmtIndex < statementCount; stmtIndex++) {
 ### Control Evaluation of Tasks
 
 ```ts
-import { DuckDBPendingResultState } from '@duckdb/node-api';
+import { DuckDBPendingResultState } from '@rizecom/node-api';
 
 async function sleep(ms) {
   return new Promise((resolve) => {

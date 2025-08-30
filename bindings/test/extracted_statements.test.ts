@@ -1,4 +1,4 @@
-import duckdb from '@duckdb/node-bindings';
+import duckdb from '@rizecom/node-bindings';
 import { expect, suite, test } from 'vitest';
 import { expectResult } from './utils/expectResult';
 import { INTEGER } from './utils/expectedLogicalTypes';

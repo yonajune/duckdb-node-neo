@@ -6,15 +6,15 @@ const getRuntimePlatformArch = () => `${process.platform}-${process.arch}`;
 const getNativeNodeBinding = (runtimePlatformArch) => {
     switch(runtimePlatformArch) {
         case `linux-x64`:
-            return require('@duckdb/node-bindings-linux-x64/duckdb.node');
+            return require('@rizecom/node-bindings-linux-x64/duckdb.node');
         case 'linux-arm64':
-            return require('@duckdb/node-bindings-linux-arm64/duckdb.node');
+            return require('@rizecom/node-bindings-linux-arm64/duckdb.node');
         case 'darwin-arm64':
-            return require('@duckdb/node-bindings-darwin-arm64/duckdb.node');
+            return require('@rizecom/node-bindings-darwin-arm64/duckdb.node');
         case 'darwin-x64':
-            return require('@duckdb/node-bindings-darwin-x64/duckdb.node');
+            return require('@rizecom/node-bindings-darwin-x64/duckdb.node');
         case 'win32-x64':
-            return require('@duckdb/node-bindings-win32-x64/duckdb.node');
+            return require('@rizecom/node-bindings-win32-x64/duckdb.node');
         default:
             const [platform, arch] = runtimePlatformArch.split('-')
             throw new Error(`Error loading duckdb native binding: unsupported arch '${arch}' for platform '${platform}'`);

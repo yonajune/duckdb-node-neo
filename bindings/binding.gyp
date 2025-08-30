@@ -55,7 +55,7 @@
           'copies': [
             {
               'files': ['<(module_root_dir)/libduckdb/libduckdb.so'],
-              'destination': '<(module_root_dir)/pkgs/@duckdb/node-bindings-linux-x64',
+              'destination': '<(module_root_dir)/pkgs/@rizecom/node-bindings-linux-x64',
             },
           ],
         }],
@@ -70,7 +70,7 @@
           'copies': [
             {
               'files': ['<(module_root_dir)/libduckdb/libduckdb.so'],
-              'destination': '<(module_root_dir)/pkgs/@duckdb/node-bindings-linux-arm64',
+              'destination': '<(module_root_dir)/pkgs/@rizecom/node-bindings-linux-arm64',
             },
           ],
         }],
@@ -89,7 +89,7 @@
           'copies': [
             {
               'files': ['<(module_root_dir)/libduckdb/libduckdb.dylib'],
-              'destination': '<(module_root_dir)/pkgs/@duckdb/node-bindings-darwin-arm64',
+              'destination': '<(module_root_dir)/pkgs/@rizecom/node-bindings-darwin-arm64',
             },
           ],
         }],
@@ -108,7 +108,7 @@
           'copies': [
             {
               'files': ['<(module_root_dir)/libduckdb/libduckdb.dylib'],
-              'destination': '<(module_root_dir)/pkgs/@duckdb/node-bindings-darwin-x64',
+              'destination': '<(module_root_dir)/pkgs/@rizecom/node-bindings-darwin-x64',
             },
           ],
         }],
@@ -121,7 +121,7 @@
           'copies': [
             {
               'files': ['<(module_root_dir)/libduckdb/duckdb.dll'],
-              'destination': '<(module_root_dir)/pkgs/@duckdb/node-bindings-win32-x64',
+              'destination': '<(module_root_dir)/pkgs/@rizecom/node-bindings-win32-x64',
             },
           ],
         }],
@@ -136,7 +136,7 @@
           'copies': [
             {
               'files': ['<(module_root_dir)/build/Release/duckdb.node'],
-              'destination': '<(module_root_dir)/pkgs/@duckdb/node-bindings-linux-x64',
+              'destination': '<(module_root_dir)/pkgs/@rizecom/node-bindings-linux-x64',
             },
           ],
         }],
@@ -144,7 +144,7 @@
           'copies': [
             {
               'files': ['<(module_root_dir)/build/Release/duckdb.node'],
-              'destination': '<(module_root_dir)/pkgs/@duckdb/node-bindings-linux-arm64',
+              'destination': '<(module_root_dir)/pkgs/@rizecom/node-bindings-linux-arm64',
             },
           ],
         }],
@@ -152,7 +152,7 @@
           'copies': [
             {
               'files': ['<(module_root_dir)/build/Release/duckdb.node'],
-              'destination': '<(module_root_dir)/pkgs/@duckdb/node-bindings-darwin-arm64',
+              'destination': '<(module_root_dir)/pkgs/@rizecom/node-bindings-darwin-arm64',
             },
           ],
         }],
@@ -160,7 +160,7 @@
           'copies': [
             {
               'files': ['<(module_root_dir)/build/Release/duckdb.node'],
-              'destination': '<(module_root_dir)/pkgs/@duckdb/node-bindings-darwin-x64',
+              'destination': '<(module_root_dir)/pkgs/@rizecom/node-bindings-darwin-x64',
             },
           ],
         }],
@@ -168,7 +168,7 @@
           'copies': [
             {
               'files': ['<(module_root_dir)/build/Release/duckdb.node'],
-              'destination': '<(module_root_dir)/pkgs/@duckdb/node-bindings-win32-x64',
+              'destination': '<(module_root_dir)/pkgs/@rizecom/node-bindings-win32-x64',
             },
           ],
         }],

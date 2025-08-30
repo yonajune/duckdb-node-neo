@@ -1,11 +1,11 @@
 {
-  "name": "@duckdb/node-api",
-  "version": "1.3.2-alpha.26",
+  "name": "@rizecom/node-api",
+  "version": "1.4.0-preview",
   "license": "MIT",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
   "dependencies": {
-    "@duckdb/node-bindings": "workspace:*"
+    "@rizecom/node-bindings": "workspace:*"
   },
   "repository": {
     "type": "git",

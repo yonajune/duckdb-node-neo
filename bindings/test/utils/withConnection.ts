@@ -1,4 +1,4 @@
-import duckdb from '@duckdb/node-bindings';
+import duckdb from '@rizecom/node-bindings';
 
 export async function withConnection(fn: (connection: duckdb.Connection) => Promise<void>): Promise<void> {
   const db = await duckdb.open();
