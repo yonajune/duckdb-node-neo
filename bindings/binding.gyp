@@ -58,6 +58,15 @@
               'destination': '<(module_root_dir)/pkgs/@rizecom/node-bindings-linux-x64',
             },
           ],
+          'actions': [
+            {
+              'action_name': 'copy_with_soname_linux_x64',
+              'message': 'Copying libduckdb with SONAME (linux x64)',
+              'inputs': ['<(module_root_dir)/libduckdb/libduckdb.so'],
+              'action': ['python3', '<(module_root_dir)/scripts/copy_with_soname_linux.py', '<(module_root_dir)/libduckdb/libduckdb.so', '<(module_root_dir)/pkgs/@rizecom/node-bindings-linux-x64'],
+              'outputs': ['<(module_root_dir)/pkgs/@rizecom/node-bindings-linux-x64/libduckdb.so'],
+            },
+          ],
         }],
         ['OS=="linux" and target_arch=="arm64"', {
           'link_settings': {
@@ -71,6 +80,15 @@
             {
               'files': ['<(module_root_dir)/libduckdb/libduckdb.so'],
               'destination': '<(module_root_dir)/pkgs/@rizecom/node-bindings-linux-arm64',
+            },
+          ],
+          'actions': [
+            {
+              'action_name': 'copy_with_soname_linux_arm64',
+              'message': 'Copying libduckdb with SONAME (linux arm64)',
+              'inputs': ['<(module_root_dir)/libduckdb/libduckdb.so'],
+              'action': ['python3', '<(module_root_dir)/scripts/copy_with_soname_linux.py', '<(module_root_dir)/libduckdb/libduckdb.so', '<(module_root_dir)/pkgs/@rizecom/node-bindings-linux-arm64'],
+              'outputs': ['<(module_root_dir)/pkgs/@rizecom/node-bindings-linux-arm64/libduckdb.so'],
             },
           ],
         }],
