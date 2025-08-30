@@ -148,27 +148,48 @@ function getBuffer(dataView: DataView, offset: number): Buffer {
 }
 
 function getVarIntFromBytes(bytes: Uint8Array): bigint {
-  const firstByte = bytes[0];
-  const positive = (firstByte & 0x80) > 0;
-  const uint64Mask = positive ? 0n : 0xffffffffffffffffn;
-  const uint8Mask = positive ? 0 : 0xff;
-  const dv = new DataView( // bytes is big endian
-    bytes.buffer,
-    bytes.byteOffset + 3,
-    bytes.byteLength - 3
-  );
-  const lastUint64Offset = dv.byteLength - 8;
-  let offset = 0;
-  let result = 0n;
-  while (offset <= lastUint64Offset) {
-    result = (result << 64n) | (dv.getBigUint64(offset) ^ uint64Mask);
-    offset += 8;
+  // Try legacy VARINT encoding (3-byte header + big-endian magnitude with optional bitwise inversion)
+  if (bytes.length >= 3) {
+    const b0 = bytes[0];
+    const b1 = bytes[1];
+    const b2 = bytes[2];
+    const positiveHeader = (b0 & 0x80) !== 0;
+    const rawHeader = (BigInt(b0) << 16n) | (BigInt(b1) << 8n) | BigInt(b2);
+    const headerLen = Number((positiveHeader ? rawHeader : (~rawHeader & 0xffffffn)) & 0x7fffffn);
+    if (headerLen + 3 === bytes.length) {
+      const uint64Mask = positiveHeader ? 0n : 0xffffffffffffffffn;
+      const uint8Mask = positiveHeader ? 0 : 0xff;
+      const dv = new DataView(
+        bytes.buffer,
+        bytes.byteOffset + 3,
+        bytes.byteLength - 3
+      );
+      const lastUint64Offset = dv.byteLength - 8;
+      let offset = 0;
+      let result = 0n;
+      while (offset <= lastUint64Offset) {
+        result = (result << 64n) | (dv.getBigUint64(offset) ^ uint64Mask);
+        offset += 8;
+      }
+      while (offset < dv.byteLength) {
+        result = (result << 8n) | BigInt(dv.getUint8(offset) ^ uint8Mask);
+        offset += 1;
+      }
+      return positiveHeader ? result : -result;
+    }
   }
-  while (offset < dv.byteLength) {
-    result = (result << 8n) | BigInt(dv.getUint8(offset) ^ uint8Mask);
-    offset += 1;
+  // Fallback: interpret as two's complement big-endian integer (BIGNUM in nightlies)
+  let value = 0n;
+  for (let i = 0; i < bytes.length; i++) {
+    value = (value << 8n) | BigInt(bytes[i]);
   }
-  return positive ? result : -result;
+  const isNegative = bytes.length > 0 && (bytes[0] & 0x80) !== 0;
+  if (isNegative) {
+    const bits = BigInt(bytes.length * 8);
+    const modulus = 1n << bits;
+    return value - modulus;
+  }
+  return value;
 }
 
 function getBytesFromVarInt(varint: bigint): Uint8Array {

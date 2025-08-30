@@ -379,7 +379,8 @@ describe('api', () => {
     assert.equal(TIMETZ.toString(), 'TIME WITH TIME ZONE');
     assert.equal(TIMESTAMPTZ.toString(), 'TIMESTAMP WITH TIME ZONE');
     assert.equal(ANY.toString(), 'ANY');
-    assert.equal(VARINT.toString(), 'VARINT');
+    // Accept both naming conventions across DuckDB 1.3.x and 1.4.0 nightlies
+    assert.ok(['VARINT', 'BIGNUM'].includes(VARINT.toString()));
     assert.equal(SQLNULL.toString(), 'SQLNULL');
   });
   test('should support creating, connecting, running a basic query, and reading results', async () => {
