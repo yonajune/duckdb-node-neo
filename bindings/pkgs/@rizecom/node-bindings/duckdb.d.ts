@@ -670,7 +670,7 @@ export function create_hugeint(input: bigint): Value;
 // DUCKDB_C_API duckdb_value duckdb_create_uhugeint(duckdb_uhugeint input);
 export function create_uhugeint(input: bigint): Value;
 
-// DUCKDB_C_API duckdb_value duckdb_create_varint(duckdb_varint input);
+// DUCKDB_C_API duckdb_value duckdb_create_bignum(duckdb_bignum input);
 export function create_varint(input: bigint): Value;
 
 // DUCKDB_C_API duckdb_value duckdb_create_decimal(duckdb_decimal input);
@@ -751,7 +751,7 @@ export function get_hugeint(value: Value): bigint;
 // DUCKDB_C_API duckdb_uhugeint duckdb_get_uhugeint(duckdb_value val);
 export function get_uhugeint(value: Value): bigint;
 
-// DUCKDB_C_API duckdb_varint duckdb_get_varint(duckdb_value val);
+// DUCKDB_C_API duckdb_bignum duckdb_get_bignum(duckdb_value val);
 export function get_varint(value: Value): bigint;
 
 // DUCKDB_C_API duckdb_decimal duckdb_get_decimal(duckdb_value val);

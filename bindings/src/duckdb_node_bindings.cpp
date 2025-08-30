@@ -275,7 +275,7 @@ Napi::BigInt MakeBigIntFromUHugeInt(Napi::Env env, duckdb_uhugeint uhugeint) {
   return Napi::BigInt::New(env, sign_bit, word_count, words);
 }
 
-duckdb_varint GetVarIntFromBigInt(Napi::Env env, Napi::BigInt bigint) {
+duckdb_bignum GetVarIntFromBigInt(Napi::Env env, Napi::BigInt bigint) {
   int sign_bit;
   size_t word_count = bigint.WordCount();
   size_t byte_count = word_count * 8;
@@ -284,22 +284,18 @@ duckdb_varint GetVarIntFromBigInt(Napi::Env env, Napi::BigInt bigint) {
   uint8_t *data = reinterpret_cast<uint8_t*>(words);
   idx_t size = byte_count;
   bool is_negative = bool(sign_bit);
-  // convert little-endian to big-endian
-  for (size_t i = 0; i < size/2; i++) {
-    auto tmp = data[i];
-    data[i] = data[size - 1 - i];
-    data[size - 1 - i] = tmp;
-  }
+  // duckdb_bignum expects little-endian byte order; Node's BigInt::ToWords
+  // already provides little-endian words. No byte-reversal required.
   return { data, size, is_negative };
 }
 
-Napi::BigInt MakeBigIntFromVarInt(Napi::Env env, duckdb_varint varint) {
+Napi::BigInt MakeBigIntFromVarInt(Napi::Env env, duckdb_bignum varint) {
   int sign_bit = varint.is_negative ? 1 : 0;
   size_t word_count = varint.size / 8;
+  // Copy into freshly allocated memory to ensure 8-byte alignment for words
   uint8_t *data = static_cast<uint8_t*>(duckdb_malloc(varint.size));
-  // convert big-endian to little-endian
-  for (size_t i = 0; i < varint.size; i++) {
-    data[i] = varint.data[varint.size - 1 - i];
+  for (idx_t i = 0; i < varint.size; i++) {
+    data[i] = varint.data[i];
   }
   uint64_t *words = reinterpret_cast<uint64_t*>(data);
   auto bigint = Napi::BigInt::New(env, sign_bit, word_count, words);
@@ -2865,13 +2861,13 @@ private:
     return CreateExternalForValue(env, value);
   }
 
-  // DUCKDB_C_API duckdb_value duckdb_create_varint(duckdb_varint input);
+  // DUCKDB_C_API duckdb_value duckdb_create_bignum(duckdb_bignum input);
   // function create_varint(input: bigint): Value
   Napi::Value create_varint(const Napi::CallbackInfo& info) {
     auto env = info.Env();
     auto input_bigint = info[0].As<Napi::BigInt>();
     auto varint = GetVarIntFromBigInt(env, input_bigint);
-    auto value = duckdb_create_varint(varint);
+    auto value = duckdb_create_bignum(varint);
     duckdb_free(varint.data);
     return CreateExternalForValue(env, value);
   }
@@ -3116,12 +3112,12 @@ private:
     return MakeBigIntFromUHugeInt(env, uhugeint);
   }
 
-  // DUCKDB_C_API duckdb_varint duckdb_get_varint(duckdb_value val);
+  // DUCKDB_C_API duckdb_bignum duckdb_get_bignum(duckdb_value val);
   // function get_varint(value: Value): bigint
   Napi::Value get_varint(const Napi::CallbackInfo& info) {
     auto env = info.Env();
     auto value = GetValueFromExternal(env, info[0]);
-    auto varint = duckdb_get_varint(value);
+    auto varint = duckdb_get_bignum(value);
     auto bigint = MakeBigIntFromVarInt(env, varint);
     duckdb_free(varint.data);
     return bigint;
