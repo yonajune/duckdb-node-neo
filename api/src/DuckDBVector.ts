@@ -147,6 +147,17 @@ function getBuffer(dataView: DataView, offset: number): Uint8Array {
   return new Uint8Array(stringBytes);
 }
 
+// VARINT/BIGNUM in DuckDB nightly builds are stored as a pointer + length, not inlined.
+// Always fetch via pointer to avoid accidentally reading the pointer bytes themselves.
+function getVarIntBytes(dataView: DataView, offset: number): Uint8Array {
+  const lengthInBytes = dataView.getUint32(offset, true);
+  return duckdb.get_data_from_pointer(
+    dataView.buffer as ArrayBuffer,
+    dataView.byteOffset + offset + 8,
+    lengthInBytes
+  );
+}
+
 function getVarIntFromBytes(bytes: Uint8Array): bigint {
   // Try legacy VARINT encoding first (3-byte header)
   if (bytes.length >= 3) {
@@ -3613,7 +3624,7 @@ export class DuckDBVarIntVector extends DuckDBVector<bigint> {
     if (!this.validity.itemValid(itemIndex)) {
       return null;
     }
-    const bytes = getStringBytes(this.dataView, itemIndex * 16);
+    const bytes = getVarIntBytes(this.dataView, itemIndex * 16);
     return bytes ? getVarIntFromBytes(bytes) : null;
   }
   public override setItem(itemIndex: number, value: bigint | null) {
