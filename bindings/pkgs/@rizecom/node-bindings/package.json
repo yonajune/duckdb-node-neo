@@ -1,5 +1,6 @@
 {
   "name": "@rizecom/node-bindings",
+  "private": true,
   "version": "1.4.0-preview",
   "license": "MIT",
   "main": "./duckdb.js",
