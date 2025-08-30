@@ -29,12 +29,13 @@ def get_install_name(dylib_path: str) -> str | None:
 
 
 def main():
-  if len(sys.argv) != 3:
-    print("usage: copy_with_install_name_darwin.py <src_dylib_path> <dest_dir>")
+  if len(sys.argv) < 3:
+    print("usage: copy_with_install_name_darwin.py <src_dylib_path> <dest_dir> [stamp_file]")
     sys.exit(2)
 
   src_dylib = sys.argv[1]
   dest_dir = sys.argv[2]
+  stamp_file = sys.argv[3] if len(sys.argv) >= 4 else None
   os.makedirs(dest_dir, exist_ok=True)
 
   # Always copy the base file
@@ -53,6 +54,9 @@ def main():
     print(f"copied {src_dylib} -> {dest_versioned}")
   else:
     print(f"versioned file already exists: {dest_versioned}")
+  if stamp_file:
+    with open(stamp_file, 'w') as f:
+      f.write('ok')
 
 
 if __name__ == "__main__":

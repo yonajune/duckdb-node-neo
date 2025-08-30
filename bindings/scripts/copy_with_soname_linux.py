@@ -27,11 +27,12 @@ def get_soname(so_path: str) -> str | None:
 
 
 def main():
-  if len(sys.argv) != 3:
-    print("usage: copy_with_soname_linux.py <src_so_path> <dest_dir>")
+  if len(sys.argv) < 3:
+    print("usage: copy_with_soname_linux.py <src_so_path> <dest_dir> [stamp_file]")
     sys.exit(2)
   src_so = sys.argv[1]
   dest_dir = sys.argv[2]
+  stamp_file = sys.argv[3] if len(sys.argv) >= 4 else None
   os.makedirs(dest_dir, exist_ok=True)
 
   # Always ensure the base .so is present
@@ -48,6 +49,10 @@ def main():
     print(f"copied {src_so} -> {dest_versioned}")
   else:
     print(f"versioned file already exists: {dest_versioned}")
+  if stamp_file:
+    # Create/overwrite a stamp file so build systems can track completion
+    with open(stamp_file, 'w') as f:
+      f.write('ok')
 
 
 if __name__ == "__main__":
