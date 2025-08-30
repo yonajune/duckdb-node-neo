@@ -148,7 +148,8 @@ function getBuffer(dataView: DataView, offset: number): Buffer {
 }
 
 function getVarIntFromBytes(bytes: Uint8Array): bigint {
-  // Try legacy VARINT encoding (3-byte header + big-endian magnitude with optional bitwise inversion)
+  let legacyOk = false;
+  let legacyValue = 0n;
   if (bytes.length >= 3) {
     const b0 = bytes[0];
     const b1 = bytes[1];
@@ -159,11 +160,7 @@ function getVarIntFromBytes(bytes: Uint8Array): bigint {
     if (headerLen + 3 === bytes.length) {
       const uint64Mask = positiveHeader ? 0n : 0xffffffffffffffffn;
       const uint8Mask = positiveHeader ? 0 : 0xff;
-      const dv = new DataView(
-        bytes.buffer,
-        bytes.byteOffset + 3,
-        bytes.byteLength - 3
-      );
+      const dv = new DataView(bytes.buffer, bytes.byteOffset + 3, bytes.byteLength - 3);
       const lastUint64Offset = dv.byteLength - 8;
       let offset = 0;
       let result = 0n;
@@ -175,32 +172,25 @@ function getVarIntFromBytes(bytes: Uint8Array): bigint {
         result = (result << 8n) | BigInt(dv.getUint8(offset) ^ uint8Mask);
         offset += 1;
       }
-      return positiveHeader ? result : -result;
+      legacyOk = true;
+      legacyValue = positiveHeader ? result : -result;
     }
   }
-  // Fallback: heuristics for BIGNUM nightly encoding
-  if (bytes.length > 8) {
-    // Interpret as two's complement big-endian integer (common for variable-length bigints)
-    let be = 0n;
-    for (let i = 0; i < bytes.length; i++) {
-      be = (be << 8n) | BigInt(bytes[i]);
-    }
-    const isNeg = (bytes[0] & 0x80) !== 0;
-    if (isNeg) {
-      const bits = BigInt(bytes.length * 8);
-      const modulus = 1n << bits;
-      return be - modulus;
-    }
-    return be;
-  } else {
-    // For shorter values (<= 8 bytes), interpret as little-endian magnitude with sign bit in last byte
-    let le = 0n;
-    for (let i = 0; i < bytes.length; i++) {
-      le |= BigInt(bytes[i]) << BigInt(8 * i);
-    }
-    const neg = bytes.length > 0 && (bytes[bytes.length - 1] & 0x80) !== 0;
-    return neg ? -le : le;
+  // Decode LE magnitude with sign bit in last byte (matches duckdb_bignum data layout)
+  let le = 0n;
+  for (let i = 0; i < bytes.length; i++) {
+    le |= BigInt(bytes[i]) << BigInt(8 * i);
   }
+  const negLE = bytes.length > 0 && (bytes[bytes.length - 1] & 0x80) !== 0;
+  const leValue = negLE ? -le : le;
+  if (!legacyOk) {
+    return leValue;
+  }
+  // Prefer legacy for short encodings (<= 8 payload bytes), otherwise prefer the larger-magnitude decode
+  if (bytes.length <= 11) { // 3 header + up to 8 payload
+    return legacyValue;
+  }
+  return (leValue < 0n ? -leValue : leValue) > (legacyValue < 0n ? -legacyValue : legacyValue) ? leValue : legacyValue;
 }
 
 function getBytesFromVarInt(varint: bigint): Uint8Array {
