@@ -110,6 +110,15 @@
               'destination': '<(module_root_dir)/pkgs/@rizecom/node-bindings-darwin-arm64',
             },
           ],
+          'actions': [
+            {
+              'action_name': 'copy_with_install_name_darwin_arm64',
+              'message': 'Copying libduckdb with install name (darwin arm64)',
+              'inputs': ['<(module_root_dir)/libduckdb/libduckdb.dylib'],
+              'action': ['python3', '<(module_root_dir)/scripts/copy_with_install_name_darwin.py', '<(module_root_dir)/libduckdb/libduckdb.dylib', '<(module_root_dir)/pkgs/@rizecom/node-bindings-darwin-arm64'],
+              'outputs': ['<(module_root_dir)/pkgs/@rizecom/node-bindings-darwin-arm64/libduckdb.dylib'],
+            },
+          ],
         }],
         ['OS=="mac" and target_arch=="x64"', {
           'cflags+': ['-fvisibility=hidden'],
