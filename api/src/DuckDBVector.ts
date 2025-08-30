@@ -185,46 +185,58 @@ function getVarIntFromBytes(bytes: Uint8Array): bigint {
       return positiveHeader ? result : -result;
     }
   }
-  // Fallback: BIGNUM nightly encoding (little-endian magnitude, sign bit in MSB of last byte)
+  // Fallback: BIGNUM nightly encoding (variable-length two's complement, big-endian)
   if (bytes.length === 0) return 0n;
-  const last = bytes[bytes.length - 1];
-  const negative = (last & 0x80) !== 0;
-  let mag = 0n;
+  let be = 0n;
   for (let i = 0; i < bytes.length; i++) {
-    const b = i === bytes.length - 1 ? (bytes[i] & 0x7f) : bytes[i];
-    mag |= BigInt(b) << BigInt(8 * i);
+    be = (be << 8n) | BigInt(bytes[i]);
   }
-  return negative ? -mag : mag;
+  const isNegative = (bytes[0] & 0x80) !== 0;
+  if (!isNegative) {
+    return be;
+  }
+  const bits = BigInt(bytes.length * 8);
+  return be - (1n << bits);
 }
 
 function getBytesFromVarInt(value: bigint): Uint8Array {
-  // BIGNUM: little-endian magnitude with sign bit in last byte
+  // BIGNUM: variable-length two's complement, big-endian minimal
   if (value === 0n) {
-    return new Uint8Array([0]);
+    return new Uint8Array([0x00]);
   }
   const negative = value < 0n;
   let v = negative ? -value : value;
-  const bytes: number[] = [];
+  // Build big-endian magnitude bytes
+  const magBE: number[] = [];
   while (v !== 0n) {
-    bytes.push(Number(v & 0xffn));
+    magBE.push(Number(v & 0xffn));
     v >>= 8n;
   }
-  // Ensure the top byte has room to encode sign for positives
+  magBE.reverse();
   if (!negative) {
-    if ((bytes[bytes.length - 1] & 0x80) !== 0) {
-      bytes.push(0x00);
+    // If MSB would be set, prepend 0x00 to keep positive sign
+    if ((magBE[0] & 0x80) !== 0) {
+      magBE.unshift(0x00);
     }
+    return Uint8Array.from(magBE);
   }
-  // Set sign bit in MSB of last byte for negatives
-  if (negative) {
-    if ((bytes[bytes.length - 1] & 0x80) === 0) {
-      bytes[bytes.length - 1] |= 0x80;
-    } else {
-      // If already set (shouldn't normally happen for minimal magnitude), append 0x80 as new high byte
-      bytes.push(0x80);
-    }
+  // Negative: compute two's complement of the big-endian magnitude
+  // Invert bytes
+  for (let i = 0; i < magBE.length; i++) {
+    magBE[i] = (~magBE[i]) & 0xff;
   }
-  return Uint8Array.from(bytes);
+  // Add 1 starting from LSB (end of array)
+  let carry = 1;
+  for (let i = magBE.length - 1; i >= 0 && carry > 0; i--) {
+    const sum = magBE[i] + carry;
+    magBE[i] = sum & 0xff;
+    carry = sum >> 8;
+  }
+  // Ensure MSB is set (negative sign)
+  if ((magBE[0] & 0x80) === 0) {
+    magBE.unshift(0xff);
+  }
+  return Uint8Array.from(magBE);
 }
 
 function getBoolean1(dataView: DataView, offset: number): boolean {
