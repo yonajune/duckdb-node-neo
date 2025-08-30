@@ -503,8 +503,9 @@ describe('api', () => {
         const actualTypeId = prepared.parameterTypeId(i + 1) as number;
         if (type.typeId === DuckDBTypeId.VARINT) {
           // Nightly builds may report STRING_LITERAL for BIGNUM parameters pre-bind
+          const acceptableIds = [DuckDBTypeId.VARINT, 37 /* STRING_LITERAL */];
           assert.ok(
-            [duckdb.Type.VARINT, duckdb.Type.STRING_LITERAL].includes(actualTypeId),
+            acceptableIds.includes(actualTypeId),
             `param ${i} type id mismatch: expected VARINT or STRING_LITERAL, got ${actualTypeId}`
           );
           // Skip deep type equality; only validate compatible ids
