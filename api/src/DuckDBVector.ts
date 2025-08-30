@@ -227,18 +227,26 @@ function getVarIntFromBytes(bytes: Uint8Array): bigint {
       return positiveHeader ? result : -result;
     }
   }
-  // Fallback: BIGNUM nightly encoding (variable-length two's complement, big-endian)
   if (bytes.length === 0) return 0n;
+  // Candidate 1: BIGNUM as big-endian two's complement
   let be = 0n;
   for (let i = 0; i < bytes.length; i++) {
     be = (be << 8n) | BigInt(bytes[i]);
   }
-  const isNegative = (bytes[0] & 0x80) !== 0;
-  if (!isNegative) {
-    return be;
+  const beNeg = (bytes[0] & 0x80) !== 0;
+  const beValue = beNeg ? be - (1n << BigInt(bytes.length * 8)) : be;
+  // Candidate 2: BIGNUM as little-endian magnitude with sign bit in last byte
+  let leMag = 0n;
+  for (let i = 0; i < bytes.length; i++) {
+    const b = i === bytes.length - 1 ? (bytes[i] & 0x7f) : bytes[i];
+    leMag |= BigInt(b) << BigInt(8 * i);
   }
-  const bits = BigInt(bytes.length * 8);
-  return be - (1n << bits);
+  const leNeg = (bytes[bytes.length - 1] & 0x80) !== 0;
+  const leValue = leNeg ? -leMag : leMag;
+  // Prefer the interpretation with the larger absolute magnitude
+  const absBe = beValue < 0n ? -beValue : beValue;
+  const absLe = leValue < 0n ? -leValue : leValue;
+  return absLe > absBe ? leValue : beValue;
 }
 
 function getBytesFromVarInt(value: bigint): Uint8Array {
