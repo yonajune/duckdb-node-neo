@@ -3,7 +3,7 @@ import { ExpectedLogicalType } from './ExpectedLogicalType';
 import { ExpectedVector } from './ExpectedVector';
 
 export interface ExpectedColumn {
-  name: string;
+  name: string | string[];
   logicalType: ExpectedLogicalType;
 }
 

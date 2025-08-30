@@ -84,7 +84,7 @@ suite('query', () => {
           { name: 'usmallint', logicalType: USMALLINT },
           { name: 'uint', logicalType: UINTEGER },
           { name: 'ubigint', logicalType: UBIGINT },
-          { name: 'varint', logicalType: VARINT },
+          { name: ['varint', 'bignum'], logicalType: VARINT },
           { name: 'date', logicalType: DATE },
           { name: 'time', logicalType: TIME },
           { name: 'timestamp', logicalType: TIMESTAMP },
