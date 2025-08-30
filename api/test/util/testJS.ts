@@ -121,7 +121,7 @@ export function createTestJSData(): ColumnData[] {
       [UBIGINT.min, UBIGINT.max, null]
     ),
     col(
-      'varint',
+      'bignum',
       VARINT,
       [String(VARINT.min), String(VARINT.max), 'null'],
       [VARINT.min, VARINT.max, null]

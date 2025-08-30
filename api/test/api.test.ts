@@ -434,7 +434,7 @@ describe('api', () => {
         { name: 'bit', type: BIT },
         { name: 'timetz', type: TIMETZ },
         { name: 'timestamptz', type: TIMESTAMPTZ },
-        { name: 'varint', type: VARINT },
+        { name: 'bignum', type: VARINT },
         { name: 'null_value', type: SQLNULL },
       ];
 

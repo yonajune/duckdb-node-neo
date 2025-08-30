@@ -166,7 +166,7 @@ export function createTestAllTypesData(): ColumnNameTypeAndValues[] {
       [String(UBIGINT.min), String(UBIGINT.max), null]
     ),
     col(
-      'varint',
+      'bignum',
       VARINT,
       { typeId: 35 },
       [VARINT.min, VARINT.max, null],
