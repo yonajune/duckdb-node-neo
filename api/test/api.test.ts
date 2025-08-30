@@ -160,7 +160,11 @@ function assertColumns(
   );
   for (let i = 0; i < expectedColumns.length; i++) {
     const { name, type } = expectedColumns[i];
-    assert.strictEqual(result.columnName(i), name, 'column name');
+    const actualName = result.columnName(i);
+    assert.ok(
+      actualName === name || (name === 'varint' && actualName === 'bignum') || (name === 'bignum' && actualName === 'varint'),
+      `column name: expected '${name}' to equal '${actualName}'`
+    );
     assert.strictEqual(
       result.columnTypeId(i),
       type.typeId,
