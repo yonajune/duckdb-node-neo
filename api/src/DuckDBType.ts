@@ -931,6 +931,10 @@ export class DuckDBVarIntType extends BaseDuckDBType<DuckDBTypeId.VARINT> {
   public constructor(alias?: string) {
     super(DuckDBTypeId.VARINT, alias);
   }
+  // DuckDB nightlies expose the SQL type name as BIGNUM even though the logical type id remains VARINT (35)
+  public override toString(): string {
+    return 'BIGNUM';
+  }
   public static readonly instance = new DuckDBVarIntType();
   public static create(alias?: string): DuckDBVarIntType {
     return alias ? new DuckDBVarIntType(alias) : DuckDBVarIntType.instance;
