@@ -178,18 +178,29 @@ function getVarIntFromBytes(bytes: Uint8Array): bigint {
       return positiveHeader ? result : -result;
     }
   }
-  // Fallback: interpret as two's complement big-endian integer (BIGNUM in nightlies)
-  let value = 0n;
-  for (let i = 0; i < bytes.length; i++) {
-    value = (value << 8n) | BigInt(bytes[i]);
+  // Fallback: heuristics for BIGNUM nightly encoding
+  if (bytes.length > 8) {
+    // Interpret as two's complement big-endian integer (common for variable-length bigints)
+    let be = 0n;
+    for (let i = 0; i < bytes.length; i++) {
+      be = (be << 8n) | BigInt(bytes[i]);
+    }
+    const isNeg = (bytes[0] & 0x80) !== 0;
+    if (isNeg) {
+      const bits = BigInt(bytes.length * 8);
+      const modulus = 1n << bits;
+      return be - modulus;
+    }
+    return be;
+  } else {
+    // For shorter values (<= 8 bytes), interpret as little-endian magnitude with sign bit in last byte
+    let le = 0n;
+    for (let i = 0; i < bytes.length; i++) {
+      le |= BigInt(bytes[i]) << BigInt(8 * i);
+    }
+    const neg = bytes.length > 0 && (bytes[bytes.length - 1] & 0x80) !== 0;
+    return neg ? -le : le;
   }
-  const isNegative = bytes.length > 0 && (bytes[0] & 0x80) !== 0;
-  if (isNegative) {
-    const bits = BigInt(bytes.length * 8);
-    const modulus = 1n << bits;
-    return value - modulus;
-  }
-  return value;
 }
 
 function getBytesFromVarInt(varint: bigint): Uint8Array {

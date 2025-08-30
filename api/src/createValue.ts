@@ -256,7 +256,8 @@ export function createValue(type: DuckDBType, input: DuckDBValue): Value {
       );
     case DuckDBTypeId.VARINT:
       if (typeof input === 'bigint') {
-        return duckdb.create_varint(input);
+        // Nightly builds accept BIGNUM via implicit cast from decimal string reliably across versions
+        return duckdb.create_varchar(input.toString());
       }
       throw new Error(`input is not a bigint`);
     case DuckDBTypeId.SQLNULL:
