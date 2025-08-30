@@ -142,14 +142,13 @@ function getString(dataView: DataView, offset: number): string {
   return textDecoder.decode(stringBytes);
 }
 
-function getBuffer(dataView: DataView, offset: number): Buffer {
+function getBuffer(dataView: DataView, offset: number): Uint8Array {
   const stringBytes = getStringBytes(dataView, offset);
-  return Buffer.from(stringBytes);
+  return new Uint8Array(stringBytes);
 }
 
 function getVarIntFromBytes(bytes: Uint8Array): bigint {
-  let legacyOk = false;
-  let legacyValue = 0n;
+  // Try legacy VARINT encoding first (3-byte header)
   if (bytes.length >= 3) {
     const b0 = bytes[0];
     const b1 = bytes[1];
@@ -172,52 +171,49 @@ function getVarIntFromBytes(bytes: Uint8Array): bigint {
         result = (result << 8n) | BigInt(dv.getUint8(offset) ^ uint8Mask);
         offset += 1;
       }
-      legacyOk = true;
-      legacyValue = positiveHeader ? result : -result;
+      return positiveHeader ? result : -result;
     }
   }
-  // Decode LE magnitude with sign bit in last byte (matches duckdb_bignum data layout)
-  let le = 0n;
+  // Fallback: BIGNUM nightly encoding (little-endian magnitude, sign bit in MSB of last byte)
+  if (bytes.length === 0) return 0n;
+  const last = bytes[bytes.length - 1];
+  const negative = (last & 0x80) !== 0;
+  let mag = 0n;
   for (let i = 0; i < bytes.length; i++) {
-    le |= BigInt(bytes[i]) << BigInt(8 * i);
+    const b = i === bytes.length - 1 ? (bytes[i] & 0x7f) : bytes[i];
+    mag |= BigInt(b) << BigInt(8 * i);
   }
-  const negLE = bytes.length > 0 && (bytes[bytes.length - 1] & 0x80) !== 0;
-  const leValue = negLE ? -le : le;
-  if (!legacyOk) {
-    return leValue;
-  }
-  // Prefer legacy for short encodings (<= 8 payload bytes), otherwise prefer the larger-magnitude decode
-  if (bytes.length <= 11) { // 3 header + up to 8 payload
-    return legacyValue;
-  }
-  return (leValue < 0n ? -leValue : leValue) > (legacyValue < 0n ? -legacyValue : legacyValue) ? leValue : legacyValue;
+  return negative ? -mag : mag;
 }
 
-function getBytesFromVarInt(varint: bigint): Uint8Array {
-  const numberBytes: number[] = []; // little endian
-  const negative = varint < 0;
-  if (varint === 0n) {
-    numberBytes.push(0);
-  } else {
-    let vi = varint < 0 ? -varint : varint;
-    while (vi !== 0n) {
-      numberBytes.push(Number(BigInt.asUintN(8, vi)));
-      vi >>= 8n;
+function getBytesFromVarInt(value: bigint): Uint8Array {
+  // BIGNUM: little-endian magnitude with sign bit in last byte
+  if (value === 0n) {
+    return new Uint8Array([0]);
+  }
+  const negative = value < 0n;
+  let v = negative ? -value : value;
+  const bytes: number[] = [];
+  while (v !== 0n) {
+    bytes.push(Number(v & 0xffn));
+    v >>= 8n;
+  }
+  // Ensure the top byte has room to encode sign for positives
+  if (!negative) {
+    if ((bytes[bytes.length - 1] & 0x80) !== 0) {
+      bytes.push(0x00);
     }
   }
-  const varIntBytes = new Uint8Array(3 + numberBytes.length); // big endian
-  let header = 0x800000 | numberBytes.length;
+  // Set sign bit in MSB of last byte for negatives
   if (negative) {
-    header = ~header;
+    if ((bytes[bytes.length - 1] & 0x80) === 0) {
+      bytes[bytes.length - 1] |= 0x80;
+    } else {
+      // If already set (shouldn't normally happen for minimal magnitude), append 0x80 as new high byte
+      bytes.push(0x80);
+    }
   }
-  varIntBytes[0] = 0xff & (header >> 16);
-  varIntBytes[1] = 0xff & (header >> 8);
-  varIntBytes[2] = 0xff & header;
-  for (let i = 0; i < numberBytes.length; i++) {
-    const byte = numberBytes[numberBytes.length - 1 - i];
-    varIntBytes[3 + i] = negative ? ~byte : byte;
-  }
-  return varIntBytes;
+  return Uint8Array.from(bytes);
 }
 
 function getBoolean1(dataView: DataView, offset: number): boolean {
@@ -3655,3 +3651,4 @@ export class DuckDBVarIntVector extends DuckDBVector<bigint> {
     );
   }
 }
+
