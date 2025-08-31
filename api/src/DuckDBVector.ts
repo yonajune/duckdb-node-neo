@@ -228,6 +228,24 @@ function getVarIntFromBytes(bytes: Uint8Array): bigint {
     }
   }
   if (bytes.length === 0) return 0n;
+  // Candidate 0: ASCII decimal representation
+  let asciiLike = true;
+  for (let i = 0; i < bytes.length; i++) {
+    const c = bytes[i];
+    if (i === 0 && c === 45 /* '-' */) continue;
+    if (c < 48 || c > 57) {
+      asciiLike = false;
+      break;
+    }
+  }
+  if (asciiLike) {
+    try {
+      const s = textDecoder.decode(bytes);
+      return BigInt(s);
+    } catch (_) {
+      // fall through to binary heuristics
+    }
+  }
   // Candidate 1: BIGNUM as big-endian two's complement
   let be = 0n;
   for (let i = 0; i < bytes.length; i++) {
