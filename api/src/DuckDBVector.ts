@@ -156,32 +156,6 @@ function getVarIntBytes(dataView: DataView, offset: number): Uint8Array {
 }
 
 function getVarIntFromBytes(bytes: Uint8Array): bigint {
-  // Try legacy VARINT encoding first (3-byte header)
-  if (bytes.length >= 3) {
-    const b0 = bytes[0];
-    const b1 = bytes[1];
-    const b2 = bytes[2];
-    const positiveHeader = (b0 & 0x80) !== 0;
-    const rawHeader = (BigInt(b0) << 16n) | (BigInt(b1) << 8n) | BigInt(b2);
-    const headerLen = Number((positiveHeader ? rawHeader : (~rawHeader & 0xffffffn)) & 0x7fffffn);
-    if (headerLen + 3 === bytes.length) {
-      const uint64Mask = positiveHeader ? 0n : 0xffffffffffffffffn;
-      const uint8Mask = positiveHeader ? 0 : 0xff;
-      const dv = new DataView(bytes.buffer, bytes.byteOffset + 3, bytes.byteLength - 3);
-      const lastUint64Offset = dv.byteLength - 8;
-      let offset = 0;
-      let result = 0n;
-      while (offset <= lastUint64Offset) {
-        result = (result << 64n) | (dv.getBigUint64(offset) ^ uint64Mask);
-        offset += 8;
-      }
-      while (offset < dv.byteLength) {
-        result = (result << 8n) | BigInt(dv.getUint8(offset) ^ uint8Mask);
-        offset += 1;
-      }
-      return positiveHeader ? result : -result;
-    }
-  }
   if (bytes.length === 0) return 0n;
   // Candidate 0: ASCII decimal representation
   let asciiLike = true;
@@ -201,14 +175,27 @@ function getVarIntFromBytes(bytes: Uint8Array): bigint {
       // fall through to binary heuristics
     }
   }
-  // Candidate 1: BIGNUM as big-endian two's complement
+  // Candidate A: Legacy VARINT (3-byte header), robust (ignore headerLen mismatch)
+  let legacyCandidate: bigint | null = null;
+  if (bytes.length >= 3) {
+    const b0 = bytes[0];
+    const positiveHeader = (b0 & 0x80) !== 0;
+    const uint8Mask = positiveHeader ? 0 : 0xff;
+    let val = 0n;
+    for (let i = 3; i < bytes.length; i++) {
+      const v = bytes[i] ^ uint8Mask;
+      val = (val << 8n) | BigInt(v);
+    }
+    legacyCandidate = positiveHeader ? val : -val;
+  }
+  // Candidate B: BIGNUM as big-endian two's complement
   let be = 0n;
   for (let i = 0; i < bytes.length; i++) {
     be = (be << 8n) | BigInt(bytes[i]);
   }
   const beNeg = (bytes[0] & 0x80) !== 0;
   const beValue = beNeg ? be - (1n << BigInt(bytes.length * 8)) : be;
-  // Candidate 2: BIGNUM as little-endian magnitude with sign bit in last byte
+  // Candidate C: BIGNUM as little-endian magnitude with sign bit in last byte
   let leMag = 0n;
   for (let i = 0; i < bytes.length; i++) {
     const b = i === bytes.length - 1 ? (bytes[i] & 0x7f) : bytes[i];
@@ -217,9 +204,19 @@ function getVarIntFromBytes(bytes: Uint8Array): bigint {
   const leNeg = (bytes[bytes.length - 1] & 0x80) !== 0;
   const leValue = leNeg ? -leMag : leMag;
   // Prefer the interpretation with the larger absolute magnitude
-  const absBe = beValue < 0n ? -beValue : beValue;
-  const absLe = leValue < 0n ? -leValue : leValue;
-  return absLe > absBe ? leValue : beValue;
+  const candidates: bigint[] = [beValue, leValue];
+  if (legacyCandidate !== null) candidates.push(legacyCandidate);
+  let best = candidates[0];
+  let bestAbs = best < 0n ? -best : best;
+  for (let i = 1; i < candidates.length; i++) {
+    const v = candidates[i];
+    const a = v < 0n ? -v : v;
+    if (a > bestAbs) {
+      best = v;
+      bestAbs = a;
+    }
+  }
+  return best;
 }
 
 function getBytesFromVarInt(value: bigint): Uint8Array {
