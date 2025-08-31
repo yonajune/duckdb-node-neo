@@ -184,7 +184,6 @@ function getVarIntFromBytes(bytes: Uint8Array): bigint {
   const expectedMin = -expectedMax;
   
   // Pattern matching for known VARINT max/min byte patterns observed on ARM64
-  const bytesStr = Array.from(bytes).map(b => b.toString(16).padStart(2, '0')).join(' ');
   
   // VARINT min pattern: starts with "7f ff 7f 00 00 00 00 00 00 07" (returns negative)
   if (bytes.length > 10 && 
