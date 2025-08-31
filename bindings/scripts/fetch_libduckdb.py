@@ -2,6 +2,7 @@ import os
 import shutil
 import urllib.request
 import zipfile
+from typing import Union
 
 def _extract_files_from_zip(archive: zipfile.ZipFile, files, output_dir: str) -> bool:
   """Attempt to extract the requested files from a zip archive.
@@ -23,7 +24,7 @@ def _extract_files_from_zip(archive: zipfile.ZipFile, files, output_dir: str) ->
   return extracted_all
 
 
-def _find_nested_lib_zip(archive: zipfile.ZipFile) -> str | None:
+def _find_nested_lib_zip(archive: zipfile.ZipFile) -> Union[str, None]:
   """Return the name of the nested libduckdb zip inside the archive, if any."""
   for name in archive.namelist():
     lower = name.lower()
