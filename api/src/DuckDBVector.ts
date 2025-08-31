@@ -175,18 +175,26 @@ function getVarIntFromBytes(bytes: Uint8Array): bigint {
       // fall through to binary heuristics
     }
   }
-  // Candidate A: Legacy VARINT (3-byte header), robust (ignore headerLen mismatch)
+  // Candidate A: Legacy VARINT (3-byte header)
   let legacyCandidate: bigint | null = null;
   if (bytes.length >= 3) {
     const b0 = bytes[0];
     const positiveHeader = (b0 & 0x80) !== 0;
-    const uint8Mask = positiveHeader ? 0 : 0xff;
-    let val = 0n;
-    for (let i = 3; i < bytes.length; i++) {
-      const v = bytes[i] ^ uint8Mask;
-      val = (val << 8n) | BigInt(v);
+    // Read big-endian magnitude from bytes after 3-byte header
+    let magnitude = 0n;
+    if (positiveHeader) {
+      // Positive: bytes are stored directly
+      for (let i = 3; i < bytes.length; i++) {
+        magnitude = (magnitude << 8n) | BigInt(bytes[i]);
+      }
+      legacyCandidate = magnitude;
+    } else {
+      // Negative: bytes are inverted (one's complement)
+      for (let i = 3; i < bytes.length; i++) {
+        magnitude = (magnitude << 8n) | BigInt(bytes[i] ^ 0xff);
+      }
+      legacyCandidate = -magnitude;
     }
-    legacyCandidate = positiveHeader ? val : -val;
   }
   // Candidate B: BIGNUM as big-endian two's complement
   let be = 0n;
