@@ -150,54 +150,9 @@ function getBuffer(dataView: DataView, offset: number): Uint8Array {
 // VARINT/BIGNUM in DuckDB nightly builds are stored as a pointer + length, not inlined.
 // Always fetch via pointer to avoid accidentally reading the pointer bytes themselves.
 function getVarIntBytes(dataView: DataView, offset: number): Uint8Array {
-  // Try string-like varlen layout first: [u32 len][padding/u32 flags][ptr at +8]
-  const lenString = dataView.getUint32(offset, true);
-  let bytesString: Uint8Array | null = null;
-  if (lenString > 0 && lenString < (1 << 24)) {
-    try {
-      bytesString = duckdb.get_data_from_pointer(
-        dataView.buffer as ArrayBuffer,
-        dataView.byteOffset + offset + 8,
-        lenString
-      );
-    } catch (_) {
-      bytesString = null;
-    }
-  }
-  // Try bignum struct layout: [ptr at +0][u32 size at +8][u32 is_negative at +12]
-  let bytesBignum: Uint8Array | null = null;
-  try {
-    const lenBignum = dataView.getUint32(offset + 8, true);
-    if (lenBignum > 0 && lenBignum < (1 << 24)) {
-      bytesBignum = duckdb.get_data_from_pointer(
-        dataView.buffer as ArrayBuffer,
-        dataView.byteOffset + offset + 0,
-        lenBignum
-      );
-    }
-  } catch (_) {
-    bytesBignum = null;
-  }
-  if (bytesString && !bytesBignum) return bytesString;
-  if (!bytesString && bytesBignum) return bytesBignum;
-  if (bytesString && bytesBignum) {
-    // Decode both and pick the one with larger absolute magnitude. The incorrect
-    // choice (e.g., pointer header) typically decodes to a tiny number.
-    const decode = (b: Uint8Array) => {
-      // reuse existing decoder below
-      try {
-        return getVarIntFromBytes(b);
-      } catch (_) {
-        return 0n;
-      }
-    };
-    const vStr = decode(bytesString);
-    const vBig = decode(bytesBignum);
-    const absStr = vStr < 0n ? -vStr : vStr;
-    const absBig = vBig < 0n ? -vBig : vBig;
-    return absBig > absStr ? bytesBignum : bytesString;
-  }
-  return new Uint8Array(0);
+  // VARINT/BIGNUM currently uses string-like varlen layout in vectors.
+  // Reuse the same logic as VARCHAR: inline when length <= 12, else pointer.
+  return getStringBytes(dataView, offset);
 }
 
 function getVarIntFromBytes(bytes: Uint8Array): bigint {
