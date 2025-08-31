@@ -1,5 +1,4 @@
 {
-  "private": true,
   "scripts": {
     "build": "tsc -b src test",
     "build:src": "tsc -b src",

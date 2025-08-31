@@ -1,6 +1,5 @@
 {
   "name": "@rizecom/node-api",
-  "private": true,
   "version": "1.4.0-preview",
   "license": "MIT",
   "main": "./lib/index.js",
