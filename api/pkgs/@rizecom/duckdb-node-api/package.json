@@ -1,6 +1,6 @@
 {
   "name": "@rizecom/duckdb-node-api",
-  "version": "1.4.0-preview",
+  "version": "1.4.0-preview.1",
   "license": "MIT",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
