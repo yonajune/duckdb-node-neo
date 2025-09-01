@@ -6,23 +6,23 @@
 
 ### Documentation
 
-- [@rizecom/node-api](api/pkgs/@rizecom/node-api/README.md)
-- [@rizecom/node-bindings](bindings/pkgs/@rizecom/node-bindings/README.md)
-- [@rizecom/node-bindings-darwin-arm64](bindings/pkgs/@rizecom/node-bindings-darwin-arm64/README.md)
-- [@rizecom/node-bindings-darwin-x64](bindings/pkgs/@rizecom/node-bindings-darwin-x64/README.md)
-- [@rizecom/node-bindings-linux-arm64](bindings/pkgs/@rizecom/node-bindings-linux-arm64/README.md)
-- [@rizecom/node-bindings-linux-x64](bindings/pkgs/@rizecom/node-bindings-linux-x64/README.md)
-- [@rizecom/node-bindings-win32-x64](bindings/pkgs/@rizecom/node-bindings-win32-x64/README.md)
+- [@rizecom/duckdb-node-api](api/pkgs/@rizecom/duckdb-node-api/README.md)
+- [@rizecom/duckdb-node-bindings](bindings/pkgs/@rizecom/duckdb-node-bindings/README.md)
+- [@rizecom/duckdb-node-bindings-darwin-arm64](bindings/pkgs/@rizecom/duckdb-node-bindings-darwin-arm64/README.md)
+- [@rizecom/duckdb-node-bindings-darwin-x64](bindings/pkgs/@rizecom/duckdb-node-bindings-darwin-x64/README.md)
+- [@rizecom/duckdb-node-bindings-linux-arm64](bindings/pkgs/@rizecom/duckdb-node-bindings-linux-arm64/README.md)
+- [@rizecom/duckdb-node-bindings-linux-x64](bindings/pkgs/@rizecom/duckdb-node-bindings-linux-x64/README.md)
+- [@rizecom/duckdb-node-bindings-win32-x64](bindings/pkgs/@rizecom/duckdb-node-bindings-win32-x64/README.md)
 
 ### Published
 
-- [@rizecom/node-api](https://www.npmjs.com/package/@rizecom/node-api)
-- [@rizecom/node-bindings](https://www.npmjs.com/package/@rizecom/node-bindings)
-- [@rizecom/node-bindings-darwin-arm64](https://www.npmjs.com/package/@rizecom/node-bindings-darwin-arm64)
-- [@rizecom/node-bindings-darwin-x64](https://www.npmjs.com/package/@rizecom/node-bindings-darwin-x64)
-- [@rizecom/node-bindings-linux-arm64](https://www.npmjs.com/package/@rizecom/node-bindings-linux-arm64)
-- [@rizecom/node-bindings-linux-x64](https://www.npmjs.com/package/@rizecom/node-bindings-linux-x64)
-- [@rizecom/node-bindings-win32-x64](https://www.npmjs.com/package/@rizecom/node-bindings-win32-x64)
+- [@rizecom/duckdb-node-api](https://www.npmjs.com/package/@rizecom/duckdb-node-api)
+- [@rizecom/duckdb-node-bindings](https://www.npmjs.com/package/@rizecom/duckdb-node-bindings)
+- [@rizecom/duckdb-node-bindings-darwin-arm64](https://www.npmjs.com/package/@rizecom/duckdb-node-bindings-darwin-arm64)
+- [@rizecom/duckdb-node-bindings-darwin-x64](https://www.npmjs.com/package/@rizecom/duckdb-node-bindings-darwin-x64)
+- [@rizecom/duckdb-node-bindings-linux-arm64](https://www.npmjs.com/package/@rizecom/duckdb-node-bindings-linux-arm64)
+- [@rizecom/duckdb-node-bindings-linux-x64](https://www.npmjs.com/package/@rizecom/duckdb-node-bindings-linux-x64)
+- [@rizecom/duckdb-node-bindings-win32-x64](https://www.npmjs.com/package/@rizecom/duckdb-node-bindings-win32-x64)
 
 ## Development
 
@@ -47,13 +47,13 @@
 ### Update Package Versions
 
 Change version in:
-- `api/pkgs/@rizecom/node-api/package.json`
-- `bindings/pkgs/@rizecom/node-bindings/package.json`
-- `bindings/pkgs/@rizecom/node-bindings-darwin-arm64/package.json`
-- `bindings/pkgs/@rizecom/node-bindings-darwin-x64/package.json`
-- `bindings/pkgs/@rizecom/node-bindings-linux-arm64/package.json`
-- `bindings/pkgs/@rizecom/node-bindings-linux-x64/package.json`
-- `bindings/pkgs/@rizecom/node-bindings-win32-x64/package.json`
+- `api/pkgs/@rizecom/duckdb-node-api/package.json`
+- `bindings/pkgs/@rizecom/duckdb-node-bindings/package.json`
+- `bindings/pkgs/@rizecom/duckdb-node-bindings-darwin-arm64/package.json`
+- `bindings/pkgs/@rizecom/duckdb-node-bindings-darwin-x64/package.json`
+- `bindings/pkgs/@rizecom/duckdb-node-bindings-linux-arm64/package.json`
+- `bindings/pkgs/@rizecom/duckdb-node-bindings-linux-x64/package.json`
+- `bindings/pkgs/@rizecom/duckdb-node-bindings-win32-x64/package.json`
 
 ### Upgrade DuckDB Version
 

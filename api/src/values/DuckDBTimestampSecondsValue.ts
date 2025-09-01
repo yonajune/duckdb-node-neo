@@ -1,4 +1,4 @@
-import duckdb, { TimestampSeconds } from '@rizecom/node-bindings';
+import duckdb, { TimestampSeconds } from '@rizecom/duckdb-node-bindings';
 import { getDuckDBTimestampStringFromSeconds } from '../conversion/dateTimeStringConversion';
 
 export class DuckDBTimestampSecondsValue implements TimestampSeconds {

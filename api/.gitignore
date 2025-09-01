@@ -1,2 +1,2 @@
-pkgs/@rizecom/node-api/lib
+pkgs/@rizecom/duckdb-node-api/lib
 test/tsconfig.tsbuildinfo

@@ -114,21 +114,21 @@ jobs:
       
       - name: Publish - Bindings - Linux x64
         if: ${{ inputs.publish }}
-        working-directory: bindings/pkgs/@rizecom/node-bindings-linux-x64
+        working-directory: bindings/pkgs/@rizecom/duckdb-node-bindings-linux-x64
         run: pnpm publish ${{ inputs.publish_dry_run && '--dry-run' || '' }} --publish-branch ${{ github.ref_name }} --access public --no-git-checks
         env:
           NPM_AUTH_TOKEN: ${{ secrets.DUCKDB_NPM_TOKEN }}
       
       - name: Publish - Bindings
         if: ${{ inputs.publish }}
-        working-directory: bindings/pkgs/@rizecom/node-bindings
+        working-directory: bindings/pkgs/@rizecom/duckdb-node-bindings
         run: pnpm publish ${{ inputs.publish_dry_run && '--dry-run' || '' }} --publish-branch ${{ github.ref_name }} --access public --no-git-checks
         env:
           NPM_AUTH_TOKEN: ${{ secrets.DUCKDB_NPM_TOKEN }}
 
       - name: Publish - API
         if: ${{ inputs.publish }}
-        working-directory: api/pkgs/@rizecom/node-api
+        working-directory: api/pkgs/@rizecom/duckdb-node-api
         run: pnpm publish ${{ inputs.publish_dry_run && '--dry-run' || '' }} --publish-branch ${{ github.ref_name }} --access public --no-git-checks
         env:
           NPM_AUTH_TOKEN: ${{ secrets.DUCKDB_NPM_TOKEN }}
@@ -164,7 +164,7 @@ jobs:
       
       - name: Publish - Bindings - Linux arm64
         if: ${{ inputs.publish }}
-        working-directory: bindings/pkgs/@rizecom/node-bindings-linux-arm64
+        working-directory: bindings/pkgs/@rizecom/duckdb-node-bindings-linux-arm64
         run: pnpm publish ${{ inputs.publish_dry_run && '--dry-run' || '' }} --publish-branch ${{ github.ref_name }} --access public --no-git-checks
         env:
           NPM_AUTH_TOKEN: ${{ secrets.DUCKDB_NPM_TOKEN }}
@@ -207,7 +207,7 @@ jobs:
       
       - name: Publish - Bindings - Darwin arm64
         if: ${{ inputs.publish }}
-        working-directory: bindings/pkgs/@rizecom/node-bindings-darwin-arm64
+        working-directory: bindings/pkgs/@rizecom/duckdb-node-bindings-darwin-arm64
         run: pnpm publish ${{ inputs.publish_dry_run && '--dry-run' || '' }} --publish-branch ${{ github.ref_name }} --access public --no-git-checks
         env:
           NPM_AUTH_TOKEN: ${{ secrets.DUCKDB_NPM_TOKEN }}
@@ -250,7 +250,7 @@ jobs:
       
       - name: Publish - Bindings - Darwin x64
         if: ${{ inputs.publish }}
-        working-directory: bindings/pkgs/@rizecom/node-bindings-darwin-x64
+        working-directory: bindings/pkgs/@rizecom/duckdb-node-bindings-darwin-x64
         run: pnpm publish ${{ inputs.publish_dry_run && '--dry-run' || '' }} --publish-branch ${{ github.ref_name }} --access public --no-git-checks
         env:
           NPM_AUTH_TOKEN: ${{ secrets.DUCKDB_NPM_TOKEN }}
@@ -293,7 +293,7 @@ jobs:
       
       - name: Publish - Bindings - Win32 x64
         if: ${{ inputs.publish }}
-        working-directory: bindings/pkgs/@rizecom/node-bindings-win32-x64
+        working-directory: bindings/pkgs/@rizecom/duckdb-node-bindings-win32-x64
         run: pnpm publish ${{ inputs.publish_dry_run && '--dry-run' || '' }} --publish-branch ${{ github.ref_name }} --access public --no-git-checks
         env:
           NPM_AUTH_TOKEN: ${{ secrets.DUCKDB_NPM_TOKEN }}

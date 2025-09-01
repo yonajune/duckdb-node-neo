@@ -8,7 +8,7 @@ import duckdb, {
   TimestampNanoseconds,
   TimestampSeconds,
   TimeTZ,
-} from '@rizecom/node-bindings';
+} from '@rizecom/duckdb-node-bindings';
 import { expect, suite, test } from 'vitest';
 import { expectLogicalType } from './utils/expectLogicalType';
 import {

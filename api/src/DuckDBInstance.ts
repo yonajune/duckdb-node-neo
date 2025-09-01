@@ -1,4 +1,4 @@
-import duckdb from '@rizecom/node-bindings';
+import duckdb from '@rizecom/duckdb-node-bindings';
 import { createConfig } from './createConfig';
 import { DuckDBConnection } from './DuckDBConnection';
 import { DuckDBInstanceCache } from './DuckDBInstanceCache';

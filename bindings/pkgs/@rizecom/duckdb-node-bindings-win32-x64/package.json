@@ -1,9 +1,9 @@
 {
-  "name": "@rizecom/node-bindings-linux-x64",
+  "name": "@rizecom/duckdb-node-bindings-win32-x64",
   "version": "1.4.0-preview",
   "license": "MIT",
   "os": [
-    "linux"
+    "win32"
   ],
   "cpu": [
     "x64"

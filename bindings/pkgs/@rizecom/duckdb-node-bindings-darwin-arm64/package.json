@@ -1,5 +1,5 @@
 {
-  "name": "@rizecom/node-bindings-darwin-arm64",
+  "name": "@rizecom/duckdb-node-bindings-darwin-arm64",
   "version": "1.4.0-preview",
   "license": "MIT",
   "os": [

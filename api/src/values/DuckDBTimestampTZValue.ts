@@ -1,4 +1,4 @@
-import duckdb, { Timestamp, TimestampParts } from '@rizecom/node-bindings';
+import duckdb, { Timestamp, TimestampParts } from '@rizecom/duckdb-node-bindings';
 import { getDuckDBTimestampStringFromMicroseconds } from '../conversion/dateTimeStringConversion';
 import { DuckDBTimestampValue } from './DuckDBTimestampValue';
 

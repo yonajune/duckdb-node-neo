@@ -1,4 +1,4 @@
-import duckdb, { Decimal } from '@rizecom/node-bindings';
+import duckdb, { Decimal } from '@rizecom/duckdb-node-bindings';
 import { stringFromDecimal } from '../conversion/stringFromDecimal';
 
 export class DuckDBDecimalValue implements Decimal {

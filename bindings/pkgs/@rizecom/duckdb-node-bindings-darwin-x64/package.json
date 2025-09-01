@@ -1,12 +1,12 @@
 {
-  "name": "@rizecom/node-bindings-linux-arm64",
+  "name": "@rizecom/duckdb-node-bindings-darwin-x64",
   "version": "1.4.0-preview",
   "license": "MIT",
   "os": [
-    "linux"
+    "darwin"
   ],
   "cpu": [
-    "arm64"
+    "x64"
   ],
   "repository": {
     "type": "git",

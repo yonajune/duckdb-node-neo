@@ -10,9 +10,9 @@ importers:
 
   api:
     dependencies:
-      '@rizecom/node-bindings':
+      '@rizecom/duckdb-node-bindings':
         specifier: workspace:*
-        version: link:../bindings/pkgs/@rizecom/node-bindings
+        version: link:../bindings/pkgs/@rizecom/duckdb-node-bindings
     devDependencies:
       '@types/node':
         specifier: ^20.17.10
@@ -27,17 +27,17 @@ importers:
         specifier: ^2.1.8
         version: 2.1.8(@types/node@20.17.10)
 
-  api/pkgs/@rizecom/node-api:
+  api/pkgs/@rizecom/duckdb-node-api:
     dependencies:
-      '@rizecom/node-bindings':
+      '@rizecom/duckdb-node-bindings':
         specifier: workspace:*
-        version: link:../../../../bindings/pkgs/@rizecom/node-bindings
+        version: link:../../../../bindings/pkgs/@rizecom/duckdb-node-bindings
 
   bindings:
     dependencies:
-      '@rizecom/node-bindings':
+      '@rizecom/duckdb-node-bindings':
         specifier: workspace:*
-        version: link:pkgs/@rizecom/node-bindings
+        version: link:pkgs/@rizecom/duckdb-node-bindings
       cross-replace:
         specifier: ^0.2.0
         version: 0.2.0
@@ -57,33 +57,33 @@ importers:
         specifier: ^2.1.8
         version: 2.1.8(@types/node@20.17.10)
 
-  bindings/pkgs/@rizecom/node-bindings:
+  bindings/pkgs/@rizecom/duckdb-node-bindings:
     optionalDependencies:
-      '@rizecom/node-bindings-darwin-arm64':
+      '@rizecom/duckdb-node-bindings-darwin-arm64':
         specifier: workspace:*
         version: link:../node-bindings-darwin-arm64
-      '@rizecom/node-bindings-darwin-x64':
+      '@rizecom/duckdb-node-bindings-darwin-x64':
         specifier: workspace:*
         version: link:../node-bindings-darwin-x64
-      '@rizecom/node-bindings-linux-arm64':
+      '@rizecom/duckdb-node-bindings-linux-arm64':
         specifier: workspace:*
         version: link:../node-bindings-linux-arm64
-      '@rizecom/node-bindings-linux-x64':
+      '@rizecom/duckdb-node-bindings-linux-x64':
         specifier: workspace:*
         version: link:../node-bindings-linux-x64
-      '@rizecom/node-bindings-win32-x64':
+      '@rizecom/duckdb-node-bindings-win32-x64':
         specifier: workspace:*
         version: link:../node-bindings-win32-x64
 
-  bindings/pkgs/@rizecom/node-bindings-darwin-arm64: {}
+  bindings/pkgs/@rizecom/duckdb-node-bindings-darwin-arm64: {}
 
-  bindings/pkgs/@rizecom/node-bindings-darwin-x64: {}
+  bindings/pkgs/@rizecom/duckdb-node-bindings-darwin-x64: {}
 
-  bindings/pkgs/@rizecom/node-bindings-linux-arm64: {}
+  bindings/pkgs/@rizecom/duckdb-node-bindings-linux-arm64: {}
 
-  bindings/pkgs/@rizecom/node-bindings-linux-x64: {}
+  bindings/pkgs/@rizecom/duckdb-node-bindings-linux-x64: {}
 
-  bindings/pkgs/@rizecom/node-bindings-win32-x64: {}
+  bindings/pkgs/@rizecom/duckdb-node-bindings-win32-x64: {}
 
 packages:
 

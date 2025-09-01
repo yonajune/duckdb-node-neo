@@ -12,7 +12,7 @@
     "test:watch": "vitest"
   },
   "dependencies": {
-    "@rizecom/node-bindings": "workspace:*",
+    "@rizecom/duckdb-node-bindings": "workspace:*",
     "cross-replace": "^0.2.0",
     "node-addon-api": "^8.3.0",
     "node-gyp": "^10.3.1",

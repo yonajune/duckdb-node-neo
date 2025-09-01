@@ -1,4 +1,4 @@
-import duckdb from '@rizecom/node-bindings';
+import duckdb from '@rizecom/duckdb-node-bindings';
 
 export class DuckDBFunctionInfo {
   private readonly function_info: duckdb.FunctionInfo;

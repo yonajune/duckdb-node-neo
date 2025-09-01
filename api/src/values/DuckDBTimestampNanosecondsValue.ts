@@ -1,4 +1,4 @@
-import duckdb, { TimestampNanoseconds } from '@rizecom/node-bindings';
+import duckdb, { TimestampNanoseconds } from '@rizecom/duckdb-node-bindings';
 import { getDuckDBTimestampStringFromNanoseconds } from '../conversion/dateTimeStringConversion';
 
 export class DuckDBTimestampNanosecondsValue implements TimestampNanoseconds {

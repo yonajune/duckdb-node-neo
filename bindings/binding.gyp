@@ -55,7 +55,7 @@
           'copies': [
             {
               'files': ['<(module_root_dir)/libduckdb/libduckdb.so'],
-              'destination': '<(module_root_dir)/pkgs/@rizecom/node-bindings-linux-x64',
+              'destination': '<(module_root_dir)/pkgs/@rizecom/duckdb-node-bindings-linux-x64',
             },
           ],
           'actions': [
@@ -63,8 +63,8 @@
               'action_name': 'copy_with_soname_linux_x64',
               'message': 'Copying libduckdb with SONAME (linux x64)',
               'inputs': ['<(module_root_dir)/libduckdb/libduckdb.so'],
-              'action': ['python3', '<(module_root_dir)/scripts/copy_with_soname_linux.py', '<(module_root_dir)/libduckdb/libduckdb.so', '<(module_root_dir)/pkgs/@rizecom/node-bindings-linux-x64', '<(module_root_dir)/pkgs/@rizecom/node-bindings-linux-x64/.stamp-libduckdb-soname'],
-              'outputs': ['<(module_root_dir)/pkgs/@rizecom/node-bindings-linux-x64/.stamp-libduckdb-soname'],
+              'action': ['python3', '<(module_root_dir)/scripts/copy_with_soname_linux.py', '<(module_root_dir)/libduckdb/libduckdb.so', '<(module_root_dir)/pkgs/@rizecom/duckdb-node-bindings-linux-x64', '<(module_root_dir)/pkgs/@rizecom/duckdb-node-bindings-linux-x64/.stamp-libduckdb-soname'],
+              'outputs': ['<(module_root_dir)/pkgs/@rizecom/duckdb-node-bindings-linux-x64/.stamp-libduckdb-soname'],
             },
           ],
         }],
@@ -79,7 +79,7 @@
           'copies': [
             {
               'files': ['<(module_root_dir)/libduckdb/libduckdb.so'],
-              'destination': '<(module_root_dir)/pkgs/@rizecom/node-bindings-linux-arm64',
+              'destination': '<(module_root_dir)/pkgs/@rizecom/duckdb-node-bindings-linux-arm64',
             },
           ],
           'actions': [
@@ -87,8 +87,8 @@
               'action_name': 'copy_with_soname_linux_arm64',
               'message': 'Copying libduckdb with SONAME (linux arm64)',
               'inputs': ['<(module_root_dir)/libduckdb/libduckdb.so'],
-              'action': ['python3', '<(module_root_dir)/scripts/copy_with_soname_linux.py', '<(module_root_dir)/libduckdb/libduckdb.so', '<(module_root_dir)/pkgs/@rizecom/node-bindings-linux-arm64', '<(module_root_dir)/pkgs/@rizecom/node-bindings-linux-arm64/.stamp-libduckdb-soname'],
-              'outputs': ['<(module_root_dir)/pkgs/@rizecom/node-bindings-linux-arm64/.stamp-libduckdb-soname'],
+              'action': ['python3', '<(module_root_dir)/scripts/copy_with_soname_linux.py', '<(module_root_dir)/libduckdb/libduckdb.so', '<(module_root_dir)/pkgs/@rizecom/duckdb-node-bindings-linux-arm64', '<(module_root_dir)/pkgs/@rizecom/duckdb-node-bindings-linux-arm64/.stamp-libduckdb-soname'],
+              'outputs': ['<(module_root_dir)/pkgs/@rizecom/duckdb-node-bindings-linux-arm64/.stamp-libduckdb-soname'],
             },
           ],
         }],
@@ -107,7 +107,7 @@
           'copies': [
             {
               'files': ['<(module_root_dir)/libduckdb/libduckdb.dylib'],
-              'destination': '<(module_root_dir)/pkgs/@rizecom/node-bindings-darwin-arm64',
+              'destination': '<(module_root_dir)/pkgs/@rizecom/duckdb-node-bindings-darwin-arm64',
             },
           ],
           'actions': [
@@ -115,8 +115,8 @@
               'action_name': 'copy_with_install_name_darwin_arm64',
               'message': 'Copying libduckdb with install name (darwin arm64)',
               'inputs': ['<(module_root_dir)/libduckdb/libduckdb.dylib'],
-              'action': ['python3', '<(module_root_dir)/scripts/copy_with_install_name_darwin.py', '<(module_root_dir)/libduckdb/libduckdb.dylib', '<(module_root_dir)/pkgs/@rizecom/node-bindings-darwin-arm64', '<(module_root_dir)/pkgs/@rizecom/node-bindings-darwin-arm64/.stamp-libduckdb-installname'],
-              'outputs': ['<(module_root_dir)/pkgs/@rizecom/node-bindings-darwin-arm64/.stamp-libduckdb-installname'],
+              'action': ['python3', '<(module_root_dir)/scripts/copy_with_install_name_darwin.py', '<(module_root_dir)/libduckdb/libduckdb.dylib', '<(module_root_dir)/pkgs/@rizecom/duckdb-node-bindings-darwin-arm64', '<(module_root_dir)/pkgs/@rizecom/duckdb-node-bindings-darwin-arm64/.stamp-libduckdb-installname'],
+              'outputs': ['<(module_root_dir)/pkgs/@rizecom/duckdb-node-bindings-darwin-arm64/.stamp-libduckdb-installname'],
             },
           ],
         }],
@@ -135,7 +135,7 @@
           'copies': [
             {
               'files': ['<(module_root_dir)/libduckdb/libduckdb.dylib'],
-              'destination': '<(module_root_dir)/pkgs/@rizecom/node-bindings-darwin-x64',
+              'destination': '<(module_root_dir)/pkgs/@rizecom/duckdb-node-bindings-darwin-x64',
             },
           ],
           'actions': [
@@ -143,8 +143,8 @@
               'action_name': 'copy_with_install_name_darwin_x64',
               'message': 'Copying libduckdb with install name (darwin x64)',
               'inputs': ['<(module_root_dir)/libduckdb/libduckdb.dylib'],
-              'action': ['python3', '<(module_root_dir)/scripts/copy_with_install_name_darwin.py', '<(module_root_dir)/libduckdb/libduckdb.dylib', '<(module_root_dir)/pkgs/@rizecom/node-bindings-darwin-x64', '<(module_root_dir)/pkgs/@rizecom/node-bindings-darwin-x64/.stamp-libduckdb-installname'],
-              'outputs': ['<(module_root_dir)/pkgs/@rizecom/node-bindings-darwin-x64/.stamp-libduckdb-installname'],
+              'action': ['python3', '<(module_root_dir)/scripts/copy_with_install_name_darwin.py', '<(module_root_dir)/libduckdb/libduckdb.dylib', '<(module_root_dir)/pkgs/@rizecom/duckdb-node-bindings-darwin-x64', '<(module_root_dir)/pkgs/@rizecom/duckdb-node-bindings-darwin-x64/.stamp-libduckdb-installname'],
+              'outputs': ['<(module_root_dir)/pkgs/@rizecom/duckdb-node-bindings-darwin-x64/.stamp-libduckdb-installname'],
             },
           ],
         }],
@@ -157,7 +157,7 @@
           'copies': [
             {
               'files': ['<(module_root_dir)/libduckdb/duckdb.dll'],
-              'destination': '<(module_root_dir)/pkgs/@rizecom/node-bindings-win32-x64',
+              'destination': '<(module_root_dir)/pkgs/@rizecom/duckdb-node-bindings-win32-x64',
             },
           ],
         }],
@@ -172,7 +172,7 @@
           'copies': [
             {
               'files': ['<(module_root_dir)/build/Release/duckdb.node'],
-              'destination': '<(module_root_dir)/pkgs/@rizecom/node-bindings-linux-x64',
+              'destination': '<(module_root_dir)/pkgs/@rizecom/duckdb-node-bindings-linux-x64',
             },
           ],
         }],
@@ -180,7 +180,7 @@
           'copies': [
             {
               'files': ['<(module_root_dir)/build/Release/duckdb.node'],
-              'destination': '<(module_root_dir)/pkgs/@rizecom/node-bindings-linux-arm64',
+              'destination': '<(module_root_dir)/pkgs/@rizecom/duckdb-node-bindings-linux-arm64',
             },
           ],
         }],
@@ -188,7 +188,7 @@
           'copies': [
             {
               'files': ['<(module_root_dir)/build/Release/duckdb.node'],
-              'destination': '<(module_root_dir)/pkgs/@rizecom/node-bindings-darwin-arm64',
+              'destination': '<(module_root_dir)/pkgs/@rizecom/duckdb-node-bindings-darwin-arm64',
             },
           ],
         }],
@@ -196,7 +196,7 @@
           'copies': [
             {
               'files': ['<(module_root_dir)/build/Release/duckdb.node'],
-              'destination': '<(module_root_dir)/pkgs/@rizecom/node-bindings-darwin-x64',
+              'destination': '<(module_root_dir)/pkgs/@rizecom/duckdb-node-bindings-darwin-x64',
             },
           ],
         }],
@@ -204,7 +204,7 @@
           'copies': [
             {
               'files': ['<(module_root_dir)/build/Release/duckdb.node'],
-              'destination': '<(module_root_dir)/pkgs/@rizecom/node-bindings-win32-x64',
+              'destination': '<(module_root_dir)/pkgs/@rizecom/duckdb-node-bindings-win32-x64',
             },
           ],
         }],

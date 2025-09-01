@@ -1,5 +1,5 @@
 
-import duckdb from '@rizecom/node-bindings';
+import duckdb from '@rizecom/duckdb-node-bindings';
 import { expect, suite, test } from 'vitest';
 
 suite('conversion', () => {

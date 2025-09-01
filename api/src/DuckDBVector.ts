@@ -1,4 +1,4 @@
-import duckdb from '@rizecom/node-bindings';
+import duckdb from '@rizecom/duckdb-node-bindings';
 import os from 'os';
 import { DuckDBLogicalType } from './DuckDBLogicalType';
 import {

@@ -1,4 +1,4 @@
-import duckdb from '@rizecom/node-bindings';
+import duckdb from '@rizecom/duckdb-node-bindings';
 import { DuckDBPreparedStatement } from './DuckDBPreparedStatement';
 import { DuckDBPreparedStatementCollection } from './DuckDBPreparedStatementCollection';
 

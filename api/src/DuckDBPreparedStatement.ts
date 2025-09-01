@@ -1,4 +1,4 @@
-import duckdb from '@rizecom/node-bindings';
+import duckdb from '@rizecom/duckdb-node-bindings';
 import { createValue } from './createValue';
 import { DuckDBLogicalType } from './DuckDBLogicalType';
 import { DuckDBMaterializedResult } from './DuckDBMaterializedResult';

@@ -1,4 +1,4 @@
-import duckdb from '@rizecom/node-bindings';
+import duckdb from '@rizecom/duckdb-node-bindings';
 import { DuckDBDataChunk } from './DuckDBDataChunk';
 import { DuckDBFunctionInfo } from './DuckDBFunctionInfo';
 import { DuckDBType } from './DuckDBType';

@@ -3,7 +3,7 @@ export {
   double_to_uhugeint,
   hugeint_to_double,
   uhugeint_to_double
-} from '@rizecom/node-bindings';
+} from '@rizecom/duckdb-node-bindings';
 export * from './configurationOptionDescriptions';
 export * from './createDuckDBValueConverter';
 export * from './DuckDBAppender';

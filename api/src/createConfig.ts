@@ -1,4 +1,4 @@
-import duckdb from '@rizecom/node-bindings';
+import duckdb from '@rizecom/duckdb-node-bindings';
 
 export function createConfig(options?: Record<string, string>): duckdb.Config {
   const config = duckdb.create_config();

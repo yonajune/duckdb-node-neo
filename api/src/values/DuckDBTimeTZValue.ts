@@ -1,4 +1,4 @@
-import duckdb, { TimeTZ, TimeTZParts } from '@rizecom/node-bindings';
+import duckdb, { TimeTZ, TimeTZParts } from '@rizecom/duckdb-node-bindings';
 import {
   getDuckDBTimeStringFromMicrosecondsInDay,
   getOffsetStringFromSeconds
