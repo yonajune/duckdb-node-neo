@@ -39,7 +39,13 @@ def main():
   os.makedirs(dest_dir, exist_ok=True)
 
   # Always copy the base file
-  shutil.copy2(src_dylib, os.path.join(dest_dir, os.path.basename(src_dylib)))
+  dest_path = os.path.join(dest_dir, os.path.basename(src_dylib))
+  
+  # Check if source and destination are the same file (e.g., hard links)
+  if os.path.exists(dest_path) and os.path.samefile(src_dylib, dest_path):
+    print(f"Source and destination are the same file, skipping copy: {dest_path}")
+  else:
+    shutil.copy2(src_dylib, dest_path)
 
   install_name = get_install_name(src_dylib)
   if not install_name:

@@ -36,7 +36,13 @@ def main():
   os.makedirs(dest_dir, exist_ok=True)
 
   # Always ensure the base .so is present
-  shutil.copy2(src_so, os.path.join(dest_dir, os.path.basename(src_so)))
+  dest_path = os.path.join(dest_dir, os.path.basename(src_so))
+  
+  # Check if source and destination are the same file (e.g., hard links)
+  if os.path.exists(dest_path) and os.path.samefile(src_so, dest_path):
+    print(f"Source and destination are the same file, skipping copy: {dest_path}")
+  else:
+    shutil.copy2(src_so, dest_path)
 
   soname = get_soname(src_so)
   if not soname:
